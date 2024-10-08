@@ -1,6 +1,8 @@
 # Book Tracker
 A javascript / CSS / HTML project based on the Odin Project that allows a user to record books they have read.
 
+This branch uses the class keyword as directed by [The Odin Project](https://www.theodinproject.com/lessons/node-path-javascript-classes)
+
 Some reflection
 - I used a fair amount of Llama 3 AI to assist with this project; I got a bit lazy and helped speed up boring bits like boiler plate or writing blocks of code repeatedly
 - This project was mainly trying to consolidate the concept of prototypes and object constructors in Javascript but I felt like this project didn't really require any of that
