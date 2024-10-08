@@ -6,16 +6,21 @@ class Book {
         this.genre = genre;
         this.read = read;
     }
-    add() {
-        bookCollection.addBook(this);
-        loadLibrary();
-    }
+}
 
+// Create modal with javascript 
+const button = document.getElementById('myButton');
+
+class bookCollection {
+    constructor() {
+        this.library = [];
+    }
+    
     loadLibrary() {
         const bookshelf = document.getElementById('library');
         bookshelf.innerHTML = ''; //Wipe out contents of the bookshelf before updating it
 
-        library.forEach((book) => {
+        this.library.forEach((book) => {
             const bookDiv = document.createElement('div');
             bookDiv.className = 'bookEntry';
 
@@ -66,20 +71,13 @@ class Book {
             bookshelf.appendChild(bookDiv);
         });
     }
-}
-
-// Create modal with javascript 
-const button = document.getElementById('myButton');
-
-class bookCollection {
-    constructor() {
-        this.library = [];
-    }
     addBook(book) {
         this.library.push(book);
+        this.loadLibrary();
     }
     removeBook(book) {
         this.library = this.library.filter(b => b.name !== book.name);
+        this.loadLibrary();
     }
 
     loadAddBookModal() {
@@ -168,7 +166,7 @@ class bookCollection {
         addBookBtn.addEventListener('click', (event) => {
             event.preventDefault();
             if (form.checkValidity()) {
-                newEntry();
+                this.newEntry();
                 document.getElementById('bookSpan').textContent = "";
             } else {
                 document.getElementById('bookSpan').textContent = "Please complete the form";
@@ -178,12 +176,12 @@ class bookCollection {
         const toggleModalBtn = document.getElementById('toggleModalBtn');
         toggleModalBtn.addEventListener('click', (event) => {
             event.preventDefault();
-            toggleModal();
+            this.toggleModal();
         });
 
         closeModalBtn.addEventListener('click', (event) => {
             event.preventDefault();
-            toggleModal();
+            this.toggleModal();
         });
 
     }
@@ -192,9 +190,9 @@ class bookCollection {
         const trashButtons = document.querySelectorAll('.bookTrash');
         trashButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const newLibrary = library.filter(book => book.name !== button.parentNode.getElementsByClassName('bookTitle')[0].textContent);
+                const newLibrary = this.library.filter(book => book.name !== button.parentNode.getElementsByClassName('bookTitle')[0].textContent);
                 button.parentNode.remove();
-                library = newLibrary;
+                this.library = newLibrary;
             });
         });
     };
@@ -207,10 +205,10 @@ class bookCollection {
 
         // Add book to database
         let newBook = new Book(bookName, bookAuthor, bookGenre, bookRead);
-        newBook.add();
+        this.addBook(newBook);
 
-        addToggle();
-        addTrash();
+        this.addToggle();
+        this.addTrash();
 
         //Clear form
         document.getElementById('bookName').value = '';
@@ -232,11 +230,11 @@ class bookCollection {
                 if (button.parentNode.getElementsByClassName('bookRead')[0].textContent == 'Unread') {
                     button.parentNode.getElementsByClassName('bookRead')[0].textContent = "Read";
                     button.parentNode.getElementsByClassName('bookToggle')[0].textContent = "Unread";
-                    library.find(book => book.name == button.parentNode.getElementsByClassName('bookTitle')[0].textContent).read = true;
+                    this.library.find(book => book.name == button.parentNode.getElementsByClassName('bookTitle')[0].textContent).read = true;
                 } else {
                     button.parentNode.getElementsByClassName('bookRead')[0].textContent = "Unread";
                     button.parentNode.getElementsByClassName('bookToggle')[0].textContent = "Read";
-                    library.find(book => book.name == button.parentNode.getElementsByClassName('bookTitle')[0].textContent).read = false;
+                    this.library.find(book => book.name == button.parentNode.getElementsByClassName('bookTitle')[0].textContent).read = false;
                 }
             });
         });
@@ -246,8 +244,8 @@ class bookCollection {
 
 window.onload = () => {
     const newCollection = new bookCollection();
+    newCollection.loadLibrary();
     newCollection.loadAddBookModal();
     newCollection.addTrash();
     newCollection.addToggle();
-    loadLibrary();
 };
